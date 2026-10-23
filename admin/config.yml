@@ -1,0 +1,101 @@
+backend:
+  name: github
+  repo: khalil-design1980/khalil-design
+  branch: main
+  commit_messages:
+    update: "تحديث {{slug}}"
+    uploadMedia: "رفع {{path}}"
+
+locale: ar
+site_url: https://khalil-design.net
+display_url: https://khalil-design.net
+logo_url: /media/logo.png
+media_folder: media
+public_folder: /media
+
+collections:
+  - name: site
+    label: محتوى الموقع
+    editor: { preview: false }
+    files:
+      - name: works
+        label: الأعمال
+        file: content/works.json
+        fields:
+          - label: الأعمال
+            label_singular: عمل
+            hint: "الأول بالقائمة بيظهر أول بالموقع. اسحب من ═ لتغيير الترتيب."
+            name: works
+            widget: list
+            summary: "{{fields.title}} · {{fields.cat}}"
+            collapsed: true
+            add_to_top: true
+            fields:
+              - { label: اسم العمل, name: title, widget: string }
+              - label: القسم
+                name: cat
+                widget: relation
+                collection: site
+                file: cats
+                search_fields: ["cats.*.label"]
+                value_field: "cats.*.label"
+                display_fields: ["cats.*.label"]
+              - { label: الصورة, name: img, widget: image, required: false, hint: "JPG أو PNG أو WEBP. يفضّل أقل من 2 ميغا." }
+              - { label: "فيديو (بدل الصورة، اختياري)", name: video, widget: file, required: false, hint: "MP4 لحد 20 ميغا." }
+              - { label: "صورة غلاف الفيديو (اختياري)", name: poster, widget: image, required: false }
+              - { label: السنة, name: year, widget: string, required: false, default: "2026" }
+              - { label: العميل, name: client, widget: string, required: false }
+              - { label: وصف قصير, name: desc, widget: text, required: false }
+      - name: cats
+        label: الأقسام
+        file: content/cats.json
+        fields:
+          - label: الأقسام
+            label_singular: قسم
+            hint: "القسم الفاضي ما بيظهر للزوار. إذا غيرت اسم قسم، غيّره كمان بالأعمال اللي فيه."
+            name: cats
+            widget: list
+            summary: "{{fields.label}}"
+            field: { label: اسم القسم, name: label, widget: string }
+      - name: reels
+        label: الفيديو
+        file: content/reels.json
+        fields:
+          - label: الفيديوهات
+            label_singular: فيديو
+            name: reels
+            widget: list
+            summary: "{{fields.name}}"
+            add_to_top: true
+            fields:
+              - { label: اسم الفيديو, name: name, widget: string }
+              - { label: الفيديو, name: src, widget: file, hint: "MP4 لحد 20 ميغا." }
+              - { label: "صورة الغلاف (اختياري)", name: poster, widget: image, required: false }
+              - { label: وصف قصير, name: desc, widget: string, required: false }
+      - name: quotes
+        label: آراء العملاء
+        file: content/quotes.json
+        fields:
+          - label: الآراء
+            label_singular: رأي
+            hint: "القسم بيظهر بالموقع لما تضيف أول رأي."
+            name: quotes
+            widget: list
+            summary: "{{fields.name}}"
+            add_to_top: true
+            fields:
+              - { label: اسم العميل, name: name, widget: string }
+              - { label: الشركة أو الصفة, name: role, widget: string, required: false }
+              - { label: رأي العميل, name: text, widget: text }
+              - label: التقييم
+                name: stars
+                widget: select
+                default: 5
+                options:
+                  - { label: "★★★★★", value: 5 }
+                  - { label: "★★★★", value: 4 }
+                  - { label: "★★★", value: 3 }
+                  - { label: "★★", value: 2 }
+                  - { label: "★", value: 1 }
+                  - { label: بدون نجوم, value: 0 }
+              - { label: "صورة العميل أو شعار شركته (اختياري)", name: img, widget: image, required: false }

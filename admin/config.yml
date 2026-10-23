@@ -41,8 +41,8 @@ collections:
                 value_field: "cats.*.label"
                 display_fields: ["cats.*.label"]
               - { label: الصورة, name: img, widget: image, required: false, hint: "JPG أو PNG أو WEBP. يفضّل أقل من 2 ميغا." }
-              - { label: "فيديو (بدل الصورة، اختياري)", name: video, widget: file, required: false, hint: "MP4 لحد 20 ميغا." }
-              - { label: "صورة غلاف الفيديو (اختياري)", name: poster, widget: image, required: false }
+              - { label: "فيديو بدل الصورة", name: video, widget: file, required: false, hint: "MP4 لحد 20 ميغا." }
+              - { label: "صورة غلاف الفيديو", name: poster, widget: image, required: false }
               - { label: السنة, name: year, widget: string, required: false, default: "2026" }
               - { label: العميل, name: client, widget: string, required: false }
               - { label: وصف قصير, name: desc, widget: text, required: false }
@@ -70,7 +70,7 @@ collections:
             fields:
               - { label: اسم الفيديو, name: name, widget: string }
               - { label: الفيديو, name: src, widget: file, hint: "MP4 لحد 20 ميغا." }
-              - { label: "صورة الغلاف (اختياري)", name: poster, widget: image, required: false }
+              - { label: "صورة الغلاف", name: poster, widget: image, required: false }
               - { label: وصف قصير, name: desc, widget: string, required: false }
       - name: quotes
         label: آراء العملاء
@@ -98,4 +98,4 @@ collections:
                   - { label: "★★", value: 2 }
                   - { label: "★", value: 1 }
                   - { label: بدون نجوم, value: 0 }
-              - { label: "صورة العميل أو شعار شركته (اختياري)", name: img, widget: image, required: false }
+              - { label: "صورة العميل أو شعار شركته", name: img, widget: image, required: false }

@@ -6,8 +6,132 @@
   <meta name="robots" content="noindex">
   <title>لوحة التحكم | Khalil Design</title>
   <link rel="icon" href="/media/logo.png" type="image/png">
+  <link rel="preload" href="/fonts/thmanyah-regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/thmanyah-bold.woff2" as="font" type="font/woff2" crossorigin>
+  <style>
+    @font-face{font-family:"Thmanyah";src:url("/fonts/thmanyah-light.woff2") format("woff2");font-weight:300;font-display:swap}
+    @font-face{font-family:"Thmanyah";src:url("/fonts/thmanyah-regular.woff2") format("woff2");font-weight:400;font-display:swap}
+    @font-face{font-family:"Thmanyah";src:url("/fonts/thmanyah-medium.woff2") format("woff2");font-weight:500;font-display:swap}
+    @font-face{font-family:"Thmanyah";src:url("/fonts/thmanyah-bold.woff2") format("woff2");font-weight:700;font-display:swap}
+    /* Brand skin for Decap CMS: warm paper, deep brown accent, Thmanyah type */
+    :root{--ink:#F3F0EA;--paper:#FBF9F6;--sand:#D8C9B8;--taupe:#A99A8B;--brown:#6F5542;--brown-d:#5E4637;--fg:#3E3D3B;--muted:#776C62;--line:rgba(111,85,66,.16);--r:14px}
+    html,body{background:var(--ink)!important;color:var(--fg)}
+    body,body *:not(svg):not(path){font-family:"Thmanyah",system-ui,sans-serif!important}
+    ::selection{background:var(--brown);color:#fff}
+
+    /* login */
+    [class*="-StyledAuthenticationPage"]{background:radial-gradient(70% 60% at 50% 30%,#fff 0%,var(--ink) 70%)!important}
+    [class*="-PageLogoIcon"] img,[class*="-PageLogoIcon"] svg{max-height:220px!important;width:auto!important}
+    [class*="-LoginButton"]{background:var(--brown)!important;color:#fff!important;border-radius:999px!important;padding:14px 34px!important;height:auto!important;font-size:16px!important;font-weight:500!important;box-shadow:0 14px 30px -14px rgba(111,85,66,.8)!important;transition:transform .2s!important}
+    [class*="-LoginButton"]:hover{background:var(--brown-d)!important;transform:translateY(-2px)}
+    [class*="-LoginButton"] svg{margin:0 0 0 10px!important}
+    [class*="-GoBackButtonStyle"]{color:var(--muted)!important}
+    [class*="-StyledAuthenticationPage"] > a[href*="decap"],[class*="-StyledAuthenticationPage"] > *:last-child svg[class*="decap"]{opacity:.35}
+
+    /* header */
+    [class*="-AppHeader-"],[class*="-AppHeader "]{background:var(--paper)!important;box-shadow:0 1px 0 var(--line),0 10px 30px -24px rgba(62,61,59,.35)!important}
+    [class*="-AppHeaderContent"]{max-width:1240px!important}
+    [class*="-AppHeaderButton"],[class*="-AppHeaderNavLink"]{color:var(--muted)!important;font-weight:500!important;font-size:15px!important}
+    [class*="-AppHeaderButton"]:hover,[class*="-AppHeaderNavLink"]:hover,[class*="buttonActive"]{color:var(--brown)!important}
+    [class*="-AppHeaderButton"] [class*="IconWrapper"],[class*="-AppHeaderNavLink"] [class*="IconWrapper"]{color:var(--taupe)!important}
+    [class*="buttonActive"] [class*="IconWrapper"]{color:var(--brown)!important}
+    [class*="-AppHeaderSiteLink"],[class*="-AppHeaderTestRepoIndicator"]{color:var(--muted)!important}
+    [class*="-AppHeaderSiteLink"]:hover{color:var(--brown)!important}
+
+    /* sidebar + lists */
+    [class*="-card-card"],[class*="-SidebarContainer"],[class*="-CollectionTopContainer"]{background:var(--paper)!important;border-radius:20px!important;box-shadow:0 1px 0 var(--line),0 18px 40px -32px rgba(62,61,59,.4)!important}
+    [class*="-SidebarHeading"],[class*="-CollectionTopHeading"]{color:var(--fg)!important;font-weight:700!important}
+    [class*="-SidebarNavLink"]{color:var(--muted)!important;border-radius:12px!important;font-weight:500!important}
+    [class*="-SidebarNavLink"]:hover,[class*="sidebarNavLinkActive"]{color:var(--brown)!important;background:rgba(216,201,184,.35)!important;border-color:var(--brown)!important}
+    [class*="-SearchInput"]{background:var(--ink)!important;border-radius:12px!important;color:var(--fg)!important}
+    [class*="-ListCard-"]{background:var(--paper)!important;border-radius:16px!important;box-shadow:0 1px 0 var(--line)!important;transition:transform .2s,box-shadow .2s}
+    [class*="-ListCard-"]:hover{transform:translateY(-2px);box-shadow:0 14px 30px -20px rgba(111,85,66,.5)!important}
+    [class*="-ListCardTitle"]{color:var(--fg)!important;font-size:17px!important;font-weight:500!important}
+    [class*="-ViewControlsButton"]{color:var(--taupe)!important}
+    [class*="-ViewControlsButton"][class*="Active"],[class*="-ViewControlsButton"]:hover{color:var(--brown)!important}
+
+    /* editor */
+    [class*="-EditorContainer"],[class*="-ControlPaneContainer"],[class*="-NoPreviewContainer"]{background:var(--ink)!important}
+    [class*="-ToolbarContainer"]{background:var(--paper)!important;box-shadow:0 1px 0 var(--line)!important}
+    [class*="-BackCollection"],[class*="-BackArrow"]{color:var(--fg)!important}
+    [class*="-BackStatus"]{border-radius:999px!important}
+    [class*="textBadgeSuccess"]{color:#3f7a4f!important}
+    [class*="-ToolbarButton"],[class*="-PublishedButton"],[class*="-PublishButton"]{border-radius:999px!important}
+    [class*="-ToolbarButton"][class*="default"]{background:var(--brown)!important;color:#fff!important}
+    [class*="-ToolbarButton"][class*="default"]:hover{background:var(--brown-d)!important}
+    [class*="-PublishedButton"]{background:rgba(216,201,184,.5)!important;color:var(--brown)!important}
+    [class*="-FieldLabel"]{background:var(--sand)!important;color:var(--brown-d)!important;border-radius:10px 10px 0 0!important;font-weight:700!important;font-size:13px!important;border:0!important}
+    [class*="-ControlContainer"] input,[class*="-ControlContainer"] textarea,[class*="-TextControl"],[class*="-ControlContainer"] [class$="-control"],[class*="-ControlContainer"] .css-13cymwt-control,[class*="-ControlContainer"] [class*="control"]{border-color:var(--sand)!important;background:var(--paper)!important;color:var(--fg)!important;border-radius:0 0 var(--r) var(--r)!important}
+    [class*="-ControlContainer"] input:focus,[class*="-ControlContainer"] textarea:focus{border-color:var(--brown)!important;outline:none!important}
+    [class*="-ControlHint"]{color:var(--muted)!important}
+    [class*="-TopBarContainer"],[class*="-StyledListItemTopBar"]{background:rgba(216,201,184,.45)!important;border-radius:var(--r) var(--r) 0 0!important}
+    [class*="-ListItem-"],[class*="-listControlItem"]{border-radius:var(--r)!important}
+    [class*="-ExpandButton"],[class*="-NestedObjectLabel"]{color:var(--fg)!important}
+    [class*="-AddButton"]{background:var(--brown)!important;color:#fff!important;border-radius:999px!important;padding:6px 14px!important;font-weight:500!important}
+    [class*="-AddButton"]:hover{background:var(--brown-d)!important}
+    [class*="-FileWidgetButton"]{background:rgba(216,201,184,.5)!important;color:var(--brown)!important;border-radius:999px!important}
+    [class*="-FileWidgetButtonRemove"]{background:#f6e2dc!important;color:#a5432f!important}
+    [class*="-ImageWrapper"]{border-radius:12px!important;border-color:var(--sand)!important}
+
+    /* media library + modals */
+    [class*="-StyledModal"],[class*="-MediaLibraryModal"]{background:var(--paper)!important;border-radius:22px!important}
+    [class*="-LibraryTitle"]{color:var(--fg)!important}
+    [class*="-CardImageWrapper"],[class*="-Card-card"]{border-radius:14px!important}
+    [class*="isPrivate"]{color:var(--muted)!important}
+    [class*="-UploadButton"],[class*="-ActionButton"]{border-radius:999px!important}
+    [class*="-UploadButton"]{background:var(--brown)!important;color:#fff!important}
+    [class*="-Toast"],[class*="Toastify__toast"]{border-radius:14px!important;font-family:"Thmanyah",sans-serif!important}
+
+    /* RTL layout fixes: the collection sidebar sits on the right, so the list makes room on that side */
+    [class*="-CollectionMain"]{padding-left:0!important;padding-right:280px!important}
+    [class*="-SidebarContainer"]{right:18px!important;left:auto!important}
+    @media (max-width:799px){[class*="-CollectionMain"]{padding-right:0!important}}
+    [class*="-NestedObjectLabel"]{background:var(--paper)!important;color:var(--fg)!important;border:1px solid var(--line)!important;border-top:0!important;border-radius:0 0 var(--r) var(--r)!important;font-size:15px!important}
+    [class*="-ControlPaneContainer"]{max-width:980px!important;margin-inline:auto!important}
+    [class*="-TopBarButton"],[class*="-DragIconContainer"]{color:var(--taupe)!important}
+    [class*="-ListCardLink"]{color:var(--fg)!important}
+    /* phones: Decap's editor assumes 800px; let it fit the screen instead */
+    @media (max-width:820px){
+      [class*="-EditorContainer"],[class*="-ToolbarContainer"]{min-width:0!important;width:100%!important}
+      [class*="-ToolbarContainer"]{height:auto!important;flex-wrap:wrap!important;padding:6px 0!important}
+      [class*="-ToolbarSectionMeta"]{display:none!important}
+      [class*="-ToolbarSectionBackLink"]{padding:0 12px!important}
+      [class*="-ControlPaneContainer"]{padding:0 12px!important}
+      [class*="-StyledModal"],[class*="-MediaLibraryModal"]{width:96vw!important;min-width:0!important}
+    }
+    [class*="-PublishButton"]{background:var(--brown)!important;color:#fff!important;border-radius:999px!important}
+    [class*="-PublishButton"]:hover{background:var(--brown-d)!important}
+    [class*="-ToolbarDropdown"] [class*="DropdownList"],[class*="-DropdownList"]{background:var(--paper)!important;border-radius:14px!important;overflow:hidden}
+    [class*="-DropdownItem"]:hover,[class*="-StyledDropdownItem"]:hover{background:rgba(216,201,184,.45)!important;color:var(--brown)!important}
+    a{color:var(--brown)}
+  </style>
 </head>
 <body>
   <script src="https://unpkg.com/decap-cms@3.16.3/dist/decap-cms.js"></script>
+  <script>
+    // Decap ships no Arabic UI; layer the strings people see onto the English set.
+    (function(){
+      var AR={
+        auth:{login:'دخول',loggingIn:'جاري الدخول...',loginWithGitHub:'الدخول بحساب GitHub'},
+        app:{header:{content:'المحتوى',media:'الصور والملفات',quickAdd:'إضافة سريعة'},app:{loadingConfig:'جاري التحميل...',waitingBackend:'لحظة...'}},
+        collection:{sidebar:{collections:'الأقسام',allCollections:'الكل',searchAll:'ابحث',searchIn:'ابحث في'},
+          collectionTop:{sortBy:'ترتيب حسب',viewAs:'طريقة العرض',filterBy:'تصفية',groupBy:'تجميع'},
+          entries:{loadingEntries:'جاري التحميل...',cachingEntries:'جاري التحميل...',noEntries:'ما في عناصر'}},
+        editor:{editorControl:{field:{optional:'اختياري'}},
+          editorControlPane:{widget:{required:'«%{fieldLabel}» مطلوب.'}},
+          editor:{onLeavePage:'في تعديلات ما انحفظت. أكيد بدك تطلع؟',onPublishing:'أكيد بدك تنشر؟',loadingEntry:'جاري التحميل...',confirmLoadBackup:'في نسخة محفوظة من تعديلاتك الماضية، بدك ترجعها؟'},
+          editorToolbar:{publishing:'جاري النشر...',publish:'نشر',published:'منشور',publishNow:'انشر الآن',publishAndCreateNew:'انشر وأضف جديد',publishAndDuplicate:'انشر وكرر',saving:'جاري الحفظ...',save:'حفظ',backCollection:' %{collectionLabel}',unsavedChanges:'تعديلات غير منشورة',changesSaved:'كل التعديلات منشورة',deployButtonLabel:'شوف الموقع',deleteEntry:'حذف',deleting:'جاري الحذف...',duplicate:'تكرار'},
+          editorWidgets:{image:{choose:'اختار صورة',chooseUrl:'رابط صورة',replaceUrl:'استبدل برابط',chooseDifferent:'غيّر الصورة',remove:'احذف الصورة',promptUrl:'حط رابط الصورة'},
+            file:{choose:'اختار ملف',chooseUrl:'رابط ملف',replaceUrl:'استبدل برابط',chooseDifferent:'غيّر الملف',remove:'احذف الملف',promptUrl:'حط رابط الملف'},
+            list:{add:'إضافة %{item}',addType:'إضافة %{item}'},object:{expand:'فتح',collapse:'إغلاق'}}},
+        mediaLibrary:{mediaLibraryCard:{copy:'نسخ',copied:'انسخ'},mediaLibrary:{onDelete:'أكيد بدك تحذف الصور المختارة؟',fileTooLarge:'الملف كبير كثير.'},
+          mediaLibraryModal:{loading:'جاري التحميل...',close:'إغلاق',noResults:'ما في نتائج.',noAssetsFound:'ما في ملفات.',noImagesFound:'ما في صور.',images:'الصور',mediaAssets:'الملفات',search:'ابحث...',uploading:'جاري الرفع...',upload:'رفع من الكمبيوتر',download:'تنزيل',deleting:'جاري الحذف...',deleteSelected:'احذف المختار',chooseSelected:'استخدم المختار'}},
+        ui:{default:{goBackToSite:'رجوع للموقع'},settingsDropdown:{logOut:'تسجيل خروج'},
+          toast:{missingRequiredField:'في خانة مطلوبة فاضية، عبّيها قبل النشر.',entrySaved:'انحفظ',entryPublished:'تم النشر ✓ الموقع بيتحدث خلال دقيقة',onFailToPersist:'ما زبط الحفظ: %{details}',onFailToPublishEntry:'ما زبط النشر: %{details}',onLoggedOut:'انتهت الجلسة، ادخل مرة ثانية.'}}
+      };
+      function merge(a,b){var o={};for(var k in a)o[k]=a[k];for(var k in b)o[k]=(b[k]&&typeof b[k]==='object'&&a[k]&&typeof a[k]==='object')?merge(a[k],b[k]):b[k];return o}
+      CMS.registerLocale('ar',merge(CMS.getLocale('en'),AR));
+    })();
+  </script>
 </body>
 </html>

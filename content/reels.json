@@ -1,3 +1,9 @@
 {
-  "reels": []
+  "reels": [
+    {
+      "src": "/media/altaqadom.mp4",
+      "poster": "/media/altaqadom.png",
+      "name": "رؤية التقدم العقاري"
+    }
+  ]
 }

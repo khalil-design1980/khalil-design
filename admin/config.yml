@@ -2,6 +2,7 @@ backend:
   name: github
   repo: khalil-design1980/khalil-design
   branch: main
+  site_domain: calm-frangipane-f1fc33.netlify.app
   commit_messages:
     update: "تحديث {{slug}}"
     uploadMedia: "رفع {{path}}"

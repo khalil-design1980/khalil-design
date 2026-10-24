@@ -56,7 +56,7 @@ collections:
             name: cats
             widget: list
             summary: "{{fields.label}}"
-            field: { label: اسم القسم, name: label, widget: string }
+            fields: [{ label: اسم القسم, name: label, widget: string }]
       - name: reels
         label: الفيديو
         file: content/reels.json

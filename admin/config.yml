@@ -3,7 +3,8 @@ backend:
   repo: khalil-design1980/khalil-design
   branch: main
   base_url: https://khalil-design.pages.dev
-  auth_endpoint: api/auth  commit_messages:
+  auth_endpoint: api/auth
+  commit_messages:
     update: "تحديث {{slug}}"
     uploadMedia: "رفع {{path}}"
 

@@ -102,6 +102,8 @@
     [class*="-PublishButton"]{background:var(--brown)!important;color:#fff!important;border-radius:999px!important}
     [class*="-PublishButton"]:hover{background:var(--brown-d)!important}
     [class*="-ToolbarDropdown"] [class*="DropdownList"],[class*="-DropdownList"]{background:var(--paper)!important;border-radius:14px!important;overflow:hidden}
+    [class*="-DropdownList"]{min-width:170px!important;width:max-content!important;margin-left:16px!important}
+    [class*="-DropdownItem"],[class*="-StyledDropdownItem"]{white-space:nowrap!important;padding:12px 18px!important;font-size:15px!important}
     [class*="-DropdownItem"]:hover,[class*="-StyledDropdownItem"]:hover{background:rgba(216,201,184,.45)!important;color:var(--brown)!important}
     a{color:var(--brown)}
   </style>
@@ -126,7 +128,7 @@
             list:{add:'إضافة %{item}',addType:'إضافة %{item}'},object:{expand:'فتح',collapse:'إغلاق'}}},
         mediaLibrary:{mediaLibraryCard:{copy:'نسخ',copied:'انسخ'},mediaLibrary:{onDelete:'أكيد بدك تحذف الصور المختارة؟',fileTooLarge:'الملف كبير كثير.'},
           mediaLibraryModal:{loading:'جاري التحميل...',close:'إغلاق',noResults:'ما في نتائج.',noAssetsFound:'ما في ملفات.',noImagesFound:'ما في صور.',images:'الصور',mediaAssets:'الملفات',search:'ابحث...',uploading:'جاري الرفع...',upload:'رفع من الكمبيوتر',download:'تنزيل',deleting:'جاري الحذف...',deleteSelected:'احذف المختار',chooseSelected:'استخدم المختار'}},
-        ui:{default:{goBackToSite:'رجوع للموقع'},settingsDropdown:{logOut:'تسجيل خروج'},
+        ui:{default:{goBackToSite:'رجوع للموقع'},settingsDropdown:{logOut:'تسجيل الخروج'},
           toast:{missingRequiredField:'في خانة مطلوبة فاضية، عبّيها قبل النشر.',entrySaved:'انحفظ',entryPublished:'تم النشر ✓ الموقع بيتحدث خلال دقيقة',onFailToPersist:'ما زبط الحفظ: %{details}',onFailToPublishEntry:'ما زبط النشر: %{details}',onLoggedOut:'انتهت الجلسة، ادخل مرة ثانية.'}}
       };
       function merge(a,b){var o={};for(var k in a)o[k]=a[k];for(var k in b)o[k]=(b[k]&&typeof b[k]==='object'&&a[k]&&typeof a[k]==='object')?merge(a[k],b[k]):b[k];return o}

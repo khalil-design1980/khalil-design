@@ -45,6 +45,17 @@ collections:
               - { label: الصورة, name: img, widget: image, required: false, hint: "JPG أو PNG أو WEBP. يفضّل أقل من 2 ميغا." }
               - { label: "فيديو بدل الصورة", name: video, widget: file, required: false, hint: "MP4 لحد 20 ميغا." }
               - { label: "صورة غلاف الفيديو", name: poster, widget: image, required: false }
+              - label: مقاس الفيديو
+                name: ratio
+                widget: select
+                required: false
+                default: auto
+                hint: "تلقائي يعني الموقع بيعرف المقاس من الفيديو نفسه."
+                options:
+                  - { label: تلقائي, value: auto }
+                  - { label: "طولي 9:16", value: "9:16" }
+                  - { label: "عريض 16:9", value: "16:9" }
+                  - { label: "كلاسيكي 4:3", value: "4:3" }
               - { label: السنة, name: year, widget: string, required: false, default: "2026" }
               - { label: العميل, name: client, widget: string, required: false }
               - { label: وصف قصير, name: desc, widget: text, required: false }
@@ -73,6 +84,17 @@ collections:
               - { label: اسم الفيديو, name: name, widget: string }
               - { label: الفيديو, name: src, widget: file, hint: "MP4 لحد 20 ميغا." }
               - { label: "صورة الغلاف", name: poster, widget: image, required: false }
+              - label: مقاس الفيديو
+                name: ratio
+                widget: select
+                required: false
+                default: auto
+                hint: "تلقائي يعني الموقع بيعرف المقاس من الفيديو نفسه."
+                options:
+                  - { label: تلقائي, value: auto }
+                  - { label: "طولي 9:16", value: "9:16" }
+                  - { label: "عريض 16:9", value: "16:9" }
+                  - { label: "كلاسيكي 4:3", value: "4:3" }
               - { label: وصف قصير, name: desc, widget: string, required: false }
       - name: quotes
         label: آراء العملاء

@@ -11,6 +11,7 @@ backend:
 locale: ar
 site_url: https://khalil-design.net
 display_url: https://khalil-design.net
+show_preview_links: false
 logo_url: /media/logo.png
 media_folder: media
 public_folder: /media

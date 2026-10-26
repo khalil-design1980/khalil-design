@@ -155,8 +155,8 @@ p{margin:0}
 .reel-band{background:radial-gradient(120% 80% at 80% 0%,rgba(216,201,184,.45),transparent 60%),var(--navy);border-block:1px solid var(--line)}
 .player{position:relative;border-radius:24px;overflow:hidden;aspect-ratio:16/9;max-width:100%;background:#000;box-shadow:0 40px 120px -40px rgba(111,85,66,.35)}
 .player video{width:100%;height:100%;object-fit:cover;display:block}
-.player.tall{aspect-ratio:var(--ar,9/16);width:min(100%,calc(82vh * var(--ar,.5625)));margin-inline:auto}
-.player.tall video{object-fit:contain}
+.player.fit{aspect-ratio:var(--ar,16/9);width:min(100%,calc(82vh * var(--ar,1.7778)));margin-inline:auto}
+.player.fit video{object-fit:contain}
 .player.tall .reel-title h3{font-size:clamp(18px,2vw,24px)}
 .player .overlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:clamp(18px,3vw,34px);background:linear-gradient(0deg,rgba(251,249,246,.85),transparent 45%,rgba(251,249,246,.35));transition:opacity .4s}
 .player.playing .overlay{opacity:0}
@@ -252,7 +252,7 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:1
 .lb-media{position:relative;background:#000;min-height:260px}
 .lb-media canvas,.lb-media video{width:100%;height:100%;object-fit:cover;display:block;aspect-ratio:4/5}
 .lb-media img{width:100%;height:auto;max-height:86vh;object-fit:contain;display:block;position:relative;top:50%;transform:translateY(-50%)}
-.lb-media video{aspect-ratio:16/9;object-fit:contain;height:auto;position:relative;top:50%;transform:translateY(-50%)}
+.lb-media video{aspect-ratio:var(--ar,16/9);max-height:86vh;object-fit:contain;height:auto;position:relative;top:50%;transform:translateY(-50%)}
 .lb-body{padding:clamp(22px,3vw,36px);display:flex;flex-direction:column;gap:16px;min-width:0}
 .lb-body h3{font-size:clamp(22px,2.6vw,30px);font-weight:700}
 .lb-body p{color:var(--soft)}
@@ -808,6 +808,8 @@ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const CATS=()=>[['all','الكل'],...DATA.cats.map(c=>[c.id,c.label])];
 const catName=k=>(DATA.cats.find(c=>c.id===k)||{label:''}).label;
 const vsrc=u=>u+(u.includes('#')?'':'#t=0.1');
+/* video ratio picked in the CMS ("auto" or empty = read it from the file) */
+const AR={'9:16':9/16,'16:9':16/9,'4:3':4/3},arOf=o=>AR[o&&o.ratio]||0;
 function renderWorks(){
  const WORKS=DATA.works;
  if(current!=='all'&&!WORKS.some(w=>w.cat===current))current='all';
@@ -836,7 +838,7 @@ grid.addEventListener('click',e=>{const c=e.target.closest('.card');if(c)openLB(
 const lb=$('#lb');let lbIdx=0,lastFocus;
 function visibleIdx(){return cards.filter(c=>!c.hidden).map(c=>+c.dataset.i)}
 function openLB(i){lbIdx=i;const w=DATA.works[i],m=$('#lbMedia');lastFocus=lastFocus||document.activeElement;m.innerHTML='';
- if(w.video){const v=document.createElement('video');Object.assign(v,{src:w.video,controls:true,loop:true,playsInline:true});if(w.poster)v.poster=w.poster;m.append(v);v.play().catch(()=>{v.muted=true;v.play().catch(()=>{})})}
+ if(w.video){const v=document.createElement('video');Object.assign(v,{src:w.video,controls:true,loop:true,playsInline:true});const war=arOf(w);if(war)v.style.setProperty('--ar',war);else v.addEventListener('loadedmetadata',()=>{if(v.videoWidth)v.style.setProperty('--ar',v.videoWidth/v.videoHeight)},{once:true});if(w.poster)v.poster=w.poster;m.append(v);v.play().catch(()=>{v.muted=true;v.play().catch(()=>{})})}
  else if(w.img){const im=document.createElement('img');im.src=w.img;im.alt=w.title;m.append(im)}
  else{const cv=document.createElement('canvas');m.append(cv);lb.hidden=false;paint(cv,w)}
  $('#lbCat').textContent=catName(w.cat);$('#lbTitle').textContent=w.title;$('#lbDesc').textContent=w.desc;$('#lbClient').textContent=w.client;$('#lbYear').textContent=w.year;$('#lbTools').textContent=w.tools||'';$('#lbTools').hidden=$('#lbToolsL').hidden=!w.tools;
@@ -849,7 +851,8 @@ addEventListener('keydown',e=>{if(lb.hidden)return;if(e.key==='Escape')closeLB()
 
 /* ---------- showreel player ---------- */
 const player=$('#player'),vid=$('#reelVideo');
-function loadReel(r){player.classList.remove('tall','playing');player.style.removeProperty('--ar');vid.src=r.poster?r.src:vsrc(r.src);if(r.poster)vid.poster=r.poster;else vid.removeAttribute('poster');$('#reelName').textContent=r.name;$('#reelDesc').textContent=r.desc||''}
+function setAR(ar){player.style.setProperty('--ar',ar);player.classList.add('fit');player.classList.toggle('tall',ar<1)}
+function loadReel(r){player.classList.remove('fit','tall','playing');player.style.removeProperty('--ar');player.dataset.ar=arOf(r)||'';if(arOf(r))setAR(arOf(r));vid.src=r.poster?r.src:vsrc(r.src);if(r.poster)vid.poster=r.poster;else vid.removeAttribute('poster');$('#reelName').textContent=r.name;$('#reelDesc').textContent=r.desc||''}
 function renderReels(){
  const REELS=DATA.reels;
  player.classList.remove('playing');vid.pause();
@@ -867,7 +870,7 @@ $('#bigPlay').onclick=play;$('#ppBtn').onclick=toggle;vid.onclick=toggle;
 vid.addEventListener('play',()=>$('#ppIcon').setAttribute('d','M4 2h3v12H4zM9 2h3v12H9z'));
 vid.addEventListener('pause',()=>{$('#ppIcon').setAttribute('d','M4 2l10 6-10 6z');player.classList.remove('playing')});
 vid.addEventListener('timeupdate',()=>{const p=vid.currentTime/(vid.duration||1)*100;$('#barFill').style.width=p+'%';$('#bar').setAttribute('aria-valuenow',Math.round(p));$('#time').textContent=`${fmt(vid.currentTime)} / ${fmt(vid.duration)}`});
-vid.addEventListener('loadedmetadata',()=>{$('#time').textContent=`0:00 / ${fmt(vid.duration)}`;const ar=vid.videoWidth/vid.videoHeight;if(ar&&ar<1.2){player.style.setProperty('--ar',ar);player.classList.add('tall')}});
+vid.addEventListener('loadedmetadata',()=>{$('#time').textContent=`0:00 / ${fmt(vid.duration)}`;const ar=vid.videoWidth/vid.videoHeight;if(ar&&!player.dataset.ar)setAR(ar)});
 $('#bar').addEventListener('click',e=>{const r=e.currentTarget.getBoundingClientRect();vid.currentTime=(e.clientX-r.left)/r.width*(vid.duration||0)});
 $('#bar').addEventListener('keydown',e=>{if(e.key==='ArrowRight')vid.currentTime+=1;if(e.key==='ArrowLeft')vid.currentTime-=1});
 $('#fsBtn').onclick=()=>{const el=player;(el.requestFullscreen?el.requestFullscreen():Promise.reject()).catch(()=>{vid.webkitEnterFullscreen&&vid.webkitEnterFullscreen()})};

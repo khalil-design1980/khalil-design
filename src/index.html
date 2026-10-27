@@ -87,15 +87,28 @@ p{margin:0}
 
 /* hero */
 .hero{position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
-#facets{position:absolute;inset:0;width:100%;height:100%;display:block}
+#facets{display:none}
 .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(270deg,rgba(245,241,232,.96) 0%,rgba(245,241,232,.78) 45%,rgba(245,241,232,.2) 100%),linear-gradient(0deg,var(--ink),transparent 30%);pointer-events:none}
 .hero .wrap{position:relative;z-index:1;padding-block:clamp(80px,13vw,160px) clamp(64px,9vw,110px)}
 .hero h1{font-size:clamp(30px,4.4vw,58px);font-weight:800;letter-spacing:-.01em;max-width:18ch;line-height:1.3}
-.hero h1 .grad{background:linear-gradient(100deg,#034434 25%,#C08236);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero h1 .grad{color:#B5772A}
 .hero .lede{margin-top:26px;font-size:clamp(17px,1.6vw,20px);color:var(--soft);max-width:46ch}
 .hero .ctas{display:flex;gap:14px;flex-wrap:wrap;margin-top:38px}
 .hero-meta{display:flex;gap:28px;flex-wrap:wrap;margin-top:64px;color:var(--muted);font-size:14px}
 .hero-meta span{display:flex;align-items:center;gap:8px}
+/* hero: copy on the start side; the intro video fills the end side from header to ticker */
+.hero-copy{max-width:min(640px,50%)}
+.hero-film{position:absolute;z-index:1;top:50%;transform:translateY(-50%);inset-inline-end:max(20px,env(safe-area-inset-left,0px));aspect-ratio:var(--ar,1.13);height:min(calc(100% - 32px),calc((46vw - 20px) / var(--ar,1.13)));margin:0;border-radius:24px;overflow:hidden;background:var(--teal);box-shadow:0 0 0 1px rgba(227,169,93,.45),0 40px 90px -40px rgba(3,68,52,.55)}
+.hero-film video{width:100%;height:100%;object-fit:cover;display:block}
+.hero-film button{font:inherit;cursor:pointer;position:absolute;inset-inline-start:16px;bottom:16px;display:inline-flex;align-items:center;gap:8px;font-size:13px;color:#F5F1E8;background:rgba(3,68,52,.72);backdrop-filter:blur(6px);border:1px solid rgba(227,169,93,.5);border-radius:999px;padding:8px 15px}
+.hero-film button svg{width:12px;height:12px;transform:scaleX(-1)}
+.hero-film button:hover{background:var(--teal)}
+.hero:has(> .hero-film[hidden]) .hero-copy{max-width:none}
+@media (max-width:900px){
+  .hero{display:flex;flex-direction:column}
+  .hero-copy{max-width:none}
+  .hero-film{position:relative;order:2;inset:auto;transform:none;height:auto;width:auto;margin:0 var(--gut-r) 28px var(--gut);aspect-ratio:var(--ar,1.13)}
+}
 .hero-meta i{width:8px;height:8px;transform:rotate(45deg);background:var(--teal);display:inline-block}
 @media (prefers-reduced-motion:no-preference){
   .hero h1,.hero .lede,.hero .ctas,.hero-meta{animation:rise .9s cubic-bezier(.2,.7,.2,1) both}
@@ -404,8 +417,12 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:1
 <main id="top">
 <section class="hero">
   <canvas id="facets" aria-hidden="true"></canvas>
-  <img class="hero-mark" src="/media/logo.png" alt="" aria-hidden="true">
+  <figure class="hero-film" id="heroFilm" hidden>
+      <video id="heroVid" muted loop playsinline preload="metadata" aria-label="من أعمالي"></video>
+      <button type="button" id="heroSound"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 3l12 7-12 7z" fill="currentColor"></path></svg><span>شغّل الصوت</span></button>
+    </figure>
   <div class="wrap">
+    <div class="hero-copy">
     <div class="eyebrow">Graphic Design · AI Video</div>
     <h1 style="margin-top:22px">تصاميم <span class="grad">تلفت النظر</span>، وفيديوهات تبقى في الذاكرة.</h1>
     <p class="lede">أنا خليل الغرابلي، مصمم جرافيك ومبدع بصري وصانع فيديو بالذكاء الاصطناعي. أبني هويات بصرية ومحتوى سوشال ميديا وإعلانات متحركة للعلامات التجارية التي تريد أن تُرى.</p>
@@ -422,6 +439,7 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:1
       <span><i></i>هويات بصرية وشعارات</span>
       <span><i></i>محتوى سوشال ميديا</span>
       <span><i></i>فيديو وإعلانات AI</span>
+    </div>
     </div>
   </div>
 </section>
@@ -909,7 +927,15 @@ function avatar(q){return q.img?`<img class="av" src="${esc(q.img)}" alt="">`:`<
 function renderQuotes(){
  const Q=DATA.quotes;$('#reviews').hidden=!Q.length;$('#navReviews').hidden=!Q.length;
  $('#quoteList').innerHTML=Q.map(q=>`<figure class="quote reveal"><div class="qtop">${q.stars?`<span class="stars" role="img" aria-label="${q.stars} من 5">${'★'.repeat(q.stars)}${'☆'.repeat(5-q.stars)}</span>`:''}</div><blockquote><p>${esc(q.text)}</p></blockquote><figcaption class="who">${avatar(q)}<span><b>${esc(q.name)}</b>${q.role?`<small>${esc(q.role)}</small>`:''}</span></figcaption></figure>`).join('')}
-function renderAll(){renderWorks();paintAll();renderReels();renderQuotes()}
+/* the site intro video plays, muted, in the hero; to swap it, replace this file in media/ */
+const HERO_SRC='/media/khalil-design-ad-website.mp4';
+function renderHeroFilm(){const f=$('#heroFilm'),v=$('#heroVid');
+ if(v.dataset.src===HERO_SRC)return;v.dataset.src=HERO_SRC;v.src=HERO_SRC;
+ if(!reduce){v.autoplay=true;v.play().catch(()=>{})}}
+$('#heroVid').addEventListener('loadedmetadata',e=>{const v=e.target;$('#heroFilm').hidden=false;if(v.videoWidth)$('#heroFilm').style.setProperty('--ar',v.videoWidth/v.videoHeight);if(!reduce)v.play().catch(()=>{})});
+$('#heroSound').addEventListener('click',()=>{const v=$('#heroVid');v.muted=!v.muted;if(!v.muted){v.currentTime=0;v.play().catch(()=>{})}$('#heroSound span').textContent=v.muted?'شغّل الصوت':'اكتم الصوت'});
+$('#heroVid').addEventListener('error',()=>{$('#heroFilm').hidden=true});
+function renderAll(){renderWorks();paintAll();renderReels();renderHeroFilm();renderQuotes()}
 function buildHTML(){
  const reset=(document.head.querySelector('style')||{}).textContent||'';
  const data=JSON.stringify(DATA).replace(/</g,'\\u003c');
@@ -1176,7 +1202,7 @@ initAdmin();
 
 /* ---------- boot ---------- */
 function drawAll(){heroInit();heroDraw(0);paintAll();portrait()}
-renderWorks();renderReels();
+renderWorks();renderReels();renderHeroFilm();
 try{const f=localStorage.getItem('kd-filter');const b=f&&f!=='all'&&filters.querySelector(`[data-f="${f}"]`);if(b)b.click()}catch(_){}
 drawAll();
 (document.fonts?document.fonts.ready:Promise.resolve()).then(()=>{drawAll();if(!reduce)requestAnimationFrame(heroLoop)});

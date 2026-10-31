@@ -387,6 +387,13 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:1
 /* testimonials */
 #reviews[hidden],.nav a[hidden]{display:none!important}
 .quotes{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(320px,100%),1fr));gap:20px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media (max-width:700px){.stats{grid-template-columns:1fr}}
+.stat{background:var(--teal);color:#F5F1E8;border-radius:22px;padding:30px 24px;text-align:center;position:relative;overflow:hidden;box-shadow:0 18px 40px -24px rgba(3,68,52,.6)}
+.stat::after{content:"";position:absolute;width:180px;height:180px;border-radius:50%;border:1.5px solid rgba(227,169,93,.28);top:-70px;left:-60px;pointer-events:none}
+.stat b{display:block;font-size:clamp(44px,5vw,60px);line-height:1.05;font-weight:700;font-family:var(--f-latin);direction:ltr}
+.stat b em{font-style:normal;color:var(--teal-hi)}
+.stat>span{display:block;margin-top:8px;font-size:16px;color:#D6E3DD}
 .quote{margin:0;background:var(--navy);border:1px solid var(--line);border-radius:22px;padding:28px 28px 22px;display:flex;flex-direction:column;gap:16px;position:relative;box-shadow:0 18px 40px -30px rgba(31,42,38,.35)}
 .quote .qtop{min-height:26px}
 .quote::before{content:"\201D";position:absolute;top:14px;left:24px;font-family:Georgia,serif;font-size:64px;line-height:1;color:var(--navy-2);pointer-events:none}
@@ -573,6 +580,16 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:1
       <div class="tools">
         <span>Photoshop</span><span>Illustrator</span><span>After Effects</span><span>Premiere Pro</span><span>Midjourney</span><span>Runway</span><span>Kling</span><span>CapCut</span>
       </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="stats" style="padding-top:0">
+  <div class="wrap">
+    <div class="stats reveal">
+      <div class="stat"><b><em>+</em><span data-n="8">8</span></b><span>سنوات خبرة</span></div>
+      <div class="stat"><b><em>+</em><span data-n="0" id="statWorks">0</span></b><span>عمل منشور بالموقع</span></div>
+      <div class="stat"><b><em>+</em><span data-n="10">10</span></b><span>علامة تجارية اشتغلت معها</span></div>
     </div>
   </div>
 </section>
@@ -942,7 +959,12 @@ function renderHeroFilm(){const f=$('#heroFilm'),v=$('#heroVid');
 $('#heroVid').addEventListener('loadedmetadata',e=>{const v=e.target;$('#heroFilm').hidden=false;if(v.videoWidth)$('#heroFilm').style.setProperty('--ar',v.videoWidth/v.videoHeight);if(!reduce)v.play().catch(()=>{})});
 $('#heroSound').addEventListener('click',()=>{const v=$('#heroVid');v.muted=!v.muted;if(!v.muted){v.currentTime=0;v.play().catch(()=>{})}$('#heroSound span').textContent=v.muted?'شغّل الصوت':'اكتم الصوت'});
 $('#heroVid').addEventListener('error',()=>{$('#heroFilm').hidden=true});
-function renderAll(){renderWorks();paintAll();renderReels();renderHeroFilm();renderQuotes()}
+/* stats: works count follows the CMS content, the rest are fixed */
+function renderStats(){const n=$('#statWorks');n.dataset.n=DATA.works.length+DATA.reels.length;if(n.dataset.done)n.textContent=n.dataset.n}
+new IntersectionObserver((es,o)=>es.forEach(en=>{if(!en.isIntersecting)return;o.disconnect();
+ document.querySelectorAll('.stat [data-n]').forEach(n=>{const T=+n.dataset.n;n.dataset.done=1;if(reduce){n.textContent=T;return}const t0=performance.now();
+  (function f(t){const p=Math.min(1,(t-t0)/1400);n.textContent=Math.round(T*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(f)})(t0)})}),{threshold:.3}).observe($('#stats'));
+function renderAll(){renderWorks();paintAll();renderReels();renderHeroFilm();renderQuotes();renderStats()}
 function buildHTML(){
  const reset=(document.head.querySelector('style')||{}).textContent||'';
  const data=JSON.stringify(DATA).replace(/</g,'\\u003c');
@@ -1209,7 +1231,7 @@ initAdmin();
 
 /* ---------- boot ---------- */
 function drawAll(){heroInit();heroDraw(0);paintAll();portrait()}
-renderWorks();renderReels();renderHeroFilm();
+renderWorks();renderReels();renderHeroFilm();renderStats();
 try{const f=localStorage.getItem('kd-filter');const b=f&&f!=='all'&&filters.querySelector(`[data-f="${f}"]`);if(b)b.click()}catch(_){}
 drawAll();
 (document.fonts?document.fonts.ready:Promise.resolve()).then(()=>{drawAll();if(!reduce)requestAnimationFrame(heroLoop)});
